@@ -1,3 +1,5 @@
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,54 +17,48 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Bloc State Management'),
+      home: NewHome(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  final String title;
+
+class NewHome extends StatefulWidget {
+  NewHome({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<NewHome> createState() => _NewHomeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _NewHomeState extends State<NewHome> {
+  @override
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+//! ส่วนดึงข้อมูล
+
+  void initState() {
+    super.initState();
+    getExchengeRate();
   }
+
+  Future <void> getExchengeRate() async{
+    var url =
+        Uri.https('cdn.moneyconvert.net', '/api/latest.json', {'q': '{http}'});
+    var response = await http.get(url);
+    print(response.body);
+  }
+//! ส่วนดึงข้อมูล
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('Exchange'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      body: const Center(
+        child: Text('ExchangeRate'),
       ),
     );
   }
 }
+
